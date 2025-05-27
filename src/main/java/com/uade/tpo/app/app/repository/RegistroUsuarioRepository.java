@@ -9,5 +9,4 @@ public interface RegistroUsuarioRepository extends JpaRepository<RegistroUsuario
 
     Optional<RegistroUsuario> findByCodigoVerificacion(String codigoVerificacion);
 
-    Optional<RegistroUsuario> findByUsuarioAndEstado(usuarios usuario, String estado);
 }

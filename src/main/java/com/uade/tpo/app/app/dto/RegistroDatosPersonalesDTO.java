@@ -2,7 +2,8 @@ package com.uade.tpo.app.app.dto;
 
 public class RegistroDatosPersonalesDTO {
 
-    private Integer codigo;
+
+    private String mail;
 
 
     private String contrasena;
@@ -14,17 +15,11 @@ public class RegistroDatosPersonalesDTO {
     private String apellido;
 
 
-    private Integer telefono;
+    private Integer dni;
 
 
-    private String direccion;
+    private Integer edad;
 
-
-    private String tipoUsuario;
-
-    // Getters y setters
-    public Integer getCodigo() { return codigo; }
-    public void setCodigo(Integer codigo) { this.codigo = codigo; }
 
     public String getContrasena() { return contrasena; }
     public void setContrasena(String contrasena) { this.contrasena = contrasena; }
@@ -35,12 +30,27 @@ public class RegistroDatosPersonalesDTO {
     public String getApellido() { return apellido; }
     public void setApellido(String apellido) { this.apellido = apellido; }
 
-    public Integer getTelefono() { return telefono; }
-    public void setTelefono(Integer telefono) { this.telefono = telefono; }
+    public Integer getDni() {
+        return dni;
+    }
 
-    public String getDireccion() { return direccion; }
-    public void setDireccion(String direccion) { this.direccion = direccion; }
+    public Integer getEdad() {
+        return edad;
+    }
 
-    public String getTipoUsuario() { return tipoUsuario; }
-    public void setTipoUsuario(String tipoUsuario) { this.tipoUsuario = tipoUsuario; }
+    public void setDni(Integer dni) {
+        this.dni = dni;
+    }
+
+    public void setEdad(Integer edad) {
+        this.edad = edad;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
 }

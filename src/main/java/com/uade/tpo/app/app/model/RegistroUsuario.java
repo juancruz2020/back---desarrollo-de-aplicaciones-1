@@ -26,14 +26,11 @@ public class RegistroUsuario {
     @Column(name = "fecha_expiracion", nullable = false)
     private LocalDateTime fechaExpiracion;
 
-    @Column(name = "estado", length = 20, nullable = false)
-    private String estado;  // PENDIENTE, CONFIRMADO, EXPIRADO
-
-    public RegistroUsuario(usuarios usuario, String codigoVerificacion, LocalDateTime fechaExpiracion, String estado) {
+    public RegistroUsuario(usuarios usuario, String codigoVerificacion, LocalDateTime fechaExpiracion) {
         this.usuario = usuario;
         this.codigoVerificacion = codigoVerificacion;
         this.fechaExpiracion = fechaExpiracion;
-        this.estado = estado;
+
     }
     public RegistroUsuario() {}
 
@@ -53,9 +50,6 @@ public class RegistroUsuario {
         return fechaExpiracion;
     }
 
-    public String getEstado() {
-        return estado;
-    }
 
     public void setIdRegistro(Integer idRegistro) {
         this.idRegistro = idRegistro;
@@ -73,8 +67,5 @@ public class RegistroUsuario {
         this.fechaExpiracion = fechaExpiracion;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
 }
 
