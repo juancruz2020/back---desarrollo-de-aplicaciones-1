@@ -37,7 +37,7 @@ public interface usuariosRepository extends JpaRepository<usuarios, Long> {
 
     @Query("SELECT CASE WHEN r.fechaExpiracion < CURRENT_TIMESTAMP THEN true ELSE false END " +
             "FROM RegistroUsuario r WHERE r.codigoVerificacion = :codigo")
-    boolean estaExpirado (String codigo);
+    Boolean estaExpirado (String codigo);
 
     @Modifying
     @Transactional

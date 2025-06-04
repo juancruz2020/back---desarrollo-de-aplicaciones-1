@@ -77,5 +77,33 @@ public class alumnos {
     public BigDecimal getCuentaCorriente() {
         return cuentaCorriente;
     }
+
+    public void setCuentaCorriente(BigDecimal cuentaCorriente) {
+        this.cuentaCorriente = cuentaCorriente;
+    }
+
+    public void setTramite(String tramite) {
+        this.tramite = tramite;
+    }
+
+    public void setDniFondo(String dniFondo) {
+        this.dniFondo = dniFondo;
+    }
+
+    public void setDniFrente(String dniFrente) {
+        this.dniFrente = dniFrente;
+    }
+
+    public void setNumeroTarjeta(String numeroTarjeta) {
+        this.numeroTarjeta = numeroTarjeta;
+    }
+
+    public void setUsuario(usuarios usuario) {
+        this.usuario = usuario;
+    }
+
+    public void setIdAlumno(Integer idAlumno) {
+        this.idAlumno = idAlumno;
+    }
 }
 

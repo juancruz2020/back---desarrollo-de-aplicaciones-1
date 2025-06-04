@@ -51,7 +51,16 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- Dependencia completa para usar Cloudinary en Java -->
+		<dependency>
+			<groupId>com.cloudinary</groupId>
+			<artifactId>cloudinary-http44</artifactId> <!-- o cloudinary-http43 si usás otra versión de HttpClient -->
+			<version>1.36.0</version>
+		</dependency>
+
 	</dependencies>
+
 
 	<build>
 		<plugins>

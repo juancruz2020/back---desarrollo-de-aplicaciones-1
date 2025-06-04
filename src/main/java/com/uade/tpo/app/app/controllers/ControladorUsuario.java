@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -34,7 +35,11 @@ public class ControladorUsuario {
             return ResponseEntity.ok("Codigo aprobado");
         }
         else if(usuariosService.ValidacionCodigo(dto) == 1){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("codigo expirado");
+            return ResponseEntity.ok("Codigo expirado");
+        }
+
+        else if(usuariosService.ValidacionCodigo(dto) == 4){
+            return ResponseEntity.ok("Codigo incorrecto");
         }
         else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("codigo incorrecto");
@@ -49,25 +54,46 @@ public class ControladorUsuario {
     }
 
 
+    //cloudinary
+    //recetasapp4@gmail.com
+    //Recetasapp4.
     @PostMapping("/registro-alumno")
     public ResponseEntity<String> registrarAlumno(
             @RequestPart("datos") RegistroAlumnoDTO dto,
             @RequestPart("DniFrente") MultipartFile dniFrente,
-            @RequestPart("DniDorso") MultipartFile dniDorso) {
+            @RequestPart("DniDorso") MultipartFile dniDorso) throws IOException {
 
-        // Lógica para guardar datos + archivos
+        usuariosService.registroAlumno(dto, dniFrente, dniDorso);
         return ResponseEntity.ok("Registro de alumno exitoso");
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginDTO dto) {
-        // Lógica de autenticación
-        return ResponseEntity.ok("Sesión iniciada");
+        if(usuariosService.login(dto)) {
+            return ResponseEntity.ok("Sesión iniciada");
+        }
+        else{
+            return ResponseEntity.ok("Credenciales incorrectas");
+        }
+    }
+
+    @PostMapping("/cambiar-contrasena-codigo")
+    public ResponseEntity<String> cambiarContrasenacodigo(@RequestBody MailCodigoDto dto) {
+        usuariosService.cambioContrasenaCodigo(dto.getMail());
+        return ResponseEntity.ok("Contraseña actualizada");
     }
 
     @PostMapping("/cambiar-contrasena")
     public ResponseEntity<String> cambiarContrasena(@RequestBody CambioContrasenaDTO dto) {
-        // Lógica para cambiar contraseña
-        return ResponseEntity.ok("Contraseña actualizada");
+        int estado = usuariosService.cambioContrasena(dto);
+        if (estado == 1) {
+            return ResponseEntity.ok("Contraseña actualizada");
+        }
+        else if (estado == 2){
+            return ResponseEntity.ok("El codigo no es correcto");
+        }
+        else{
+            return ResponseEntity.ok("El codigo expiro");
+        }
     }
 }
