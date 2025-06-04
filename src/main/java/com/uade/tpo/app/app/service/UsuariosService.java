@@ -149,6 +149,10 @@ public class UsuariosService {
         return cuentaUsuarioRepository.existePorLogin(dto.getContrasena(), dto.getCredencialMail(), dto.getCredencialNikc());
     }
 
+    public String obtenermail(LoginDTO dto){
+        return usuariosRepository.findMailsByNicknameOrMail(dto.getCredencialNikc(), dto.getCredencialMail());
+    }
+
     public void cambioContrasenaCodigo(String mail) {
         int id = usuariosRepository.findIdUsuarioByMail(mail);
 

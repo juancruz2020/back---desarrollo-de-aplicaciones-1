@@ -44,4 +44,7 @@ public interface usuariosRepository extends JpaRepository<usuarios, Long> {
     @Query("UPDATE usuarios u SET u.nombre = :nombre WHERE u.idUsuario = :id")
     void actualizarNombrePorId(String nombre, Integer id);
 
+    @Query("SELECT u.mail FROM usuarios u WHERE u.nickname = :nickname OR u.mail = :mail")
+    String findMailsByNicknameOrMail( String nickname, String mail);
+
 }
