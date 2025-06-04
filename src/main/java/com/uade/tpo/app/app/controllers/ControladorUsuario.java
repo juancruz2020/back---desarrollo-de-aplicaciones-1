@@ -70,10 +70,13 @@ public class ControladorUsuario {
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginDTO dto) {
         if(usuariosService.login(dto)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(usuariosService.obtenermail(dto));
+            System.out.println("1");
+            return ResponseEntity.ok(usuariosService.obtenermail(dto));
         }
         else{
-            return ResponseEntity.ok("Credenciales incorrectas");
+            System.out.println("2");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(usuariosService.obtenermail(dto));
+
         }
     }
 
