@@ -12,7 +12,6 @@ public class Paso {
 
     private Integer nroPaso;
     private String texto;
-    private String urlImagen = "";
 
     @ManyToOne
     @JoinColumn(name = "idReceta")
@@ -22,13 +21,6 @@ public class Paso {
         this.idPaso = idPaso;
         this.nroPaso = nroPaso;
         this.texto = texto;
-        this.receta = receta;
-    }
-
-    public Paso(Integer nroPaso, String texto, String urlImagen, Receta receta) {
-        this.nroPaso = nroPaso;
-        this.texto = texto;
-        this.urlImagen = urlImagen;
         this.receta = receta;
     }
 
@@ -72,7 +64,4 @@ public class Paso {
         this.receta = receta;
     }
 
-    public String geturlImagen() {
-        return this.urlImagen;
-    }
 }

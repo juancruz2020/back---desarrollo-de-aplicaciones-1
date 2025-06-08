@@ -213,7 +213,7 @@ public class RecetaService {
         List<PasoDTO> pasosDto = pasoRepository.findByRecetaIdReceta(receta.getIdReceta())
                 .stream()
                 .map(p -> {
-                    return new PasoDTO(p.getNroPaso(), p.getTexto(), p.geturlImagen());
+                    return new PasoDTO(p.getNroPaso(), p.getTexto());
                 })
                 .collect(Collectors.toList());
         dto.setPasos(pasosDto);
