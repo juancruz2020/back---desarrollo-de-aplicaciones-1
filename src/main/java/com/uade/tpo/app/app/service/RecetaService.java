@@ -6,6 +6,7 @@ import com.uade.tpo.app.app.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
@@ -124,26 +125,27 @@ public class RecetaService {
 
 
 
-
-    public Receta modificarReceta(String nickname, String nombre, String categoria,
+    @Transactional
+    public Receta modificarReceta(Long id, String nickname, String nombre, String categoria,
                                   List<IngredienteDTO> ingredientes, List<PasoDTO> pasos,
                                   String descripcion, MultipartFile[] imagenes) throws Throwable {
 
         Usuario usuario = usuarioRepository.findByNicknameIgnoreCase(nickname)
                 .orElseThrow(() -> new Exception("Usuario no encontrado"));
 
-        Receta receta = recetaRepository.findByNombreRecetaIgnoreCase(nombre)
+        Receta receta = recetaRepository.findByIdReceta(id)
                 .orElseThrow(() -> new Exception("Receta no encontrada"));
 
-        TipoReceta tipo = tipoRecetaRepository.findByDescripcionIgnoreCase(categoria)
-                .orElseThrow(() -> new Exception("Categoría no encontrada"));
+        //TipoReceta tipo = tipoRecetaRepository.findByDescripcionIgnoreCase(categoria)
+        //        .orElseThrow(() -> new Exception("Categoría no encontrada"));
 
         receta.setDescripcionReceta(descripcion);
-        receta.setTipoReceta(tipo);
+        //receta.setTipoReceta(tipo);
         recetaRepository.save(receta);
 
         // Eliminar ingredientes y pasos anteriores
         utilizadoRepository.deleteByRecetaIdReceta(receta.getIdReceta());
+
         List<Paso> pasosAnteriores = pasoRepository.findByRecetaIdReceta(receta.getIdReceta());
         for (Paso paso : pasosAnteriores) {
             multimediaRepository.deleteByPasoIdPaso(paso.getIdPaso());
@@ -152,28 +154,45 @@ public class RecetaService {
 
         // Cargar nuevos ingredientes
         for (IngredienteDTO dto : ingredientes) {
-            Ingrediente ingrediente = ingredienteRepository.findByNombreIgnoreCase(dto.getNombre())
-                    .orElseGet(() -> ingredienteRepository.save(new Ingrediente(dto.getNombre())));
+            try {
+                if (dto.getNombre() == null || dto.getCantidad() == null || dto.getUnidad() == null) {
+                    System.out.println("Ingrediente inválido: " + dto);
+                    continue;
+                }
 
-            Utilizado utilizado = new Utilizado(receta, ingrediente, dto.getCantidad(), dto.getUnidad(), dto.getObservaciones());
-            utilizadoRepository.save(utilizado);
+                Ingrediente ingrediente = ingredienteRepository.findByNombreIgnoreCase(dto.getNombre())
+                        .orElseGet(() -> ingredienteRepository.save(new Ingrediente(dto.getNombre())));
+
+                Unidad unidad = unidadRepository.findByDescripcionIgnoreCase(dto.getUnidad())
+                        .orElseThrow(() -> new Exception("Unidad no encontrada: " + dto.getUnidad()));
+
+                Utilizado utilizado = new Utilizado(receta, ingrediente, dto.getCantidad(), unidad, dto.getObservaciones());
+
+                utilizadoRepository.save(utilizado);
+                System.out.println("Ingrediente guardado correctamente: " + dto.getNombre());
+            } catch (Exception e) {
+                System.out.println("Error al guardar ingrediente: " + dto.getNombre() + " - " + e.getMessage());
+            }
         }
 
-        // Cargar nuevos pasos y sus imágenes
-        for (int i = 0; i < pasos.size(); i++) {
-            PasoDTO pasoDto = pasos.get(i);
-            Paso paso = new Paso(pasoDto.getNroPaso(), pasoDto.getTexto(), receta);
-            paso = pasoRepository.save(paso);
+        // No agregar nuevos pasos si no vienen en la petición
+        if (pasos != null && !pasos.isEmpty()) {
+            for (int i = 0; i < pasos.size(); i++) {
+                PasoDTO pasoDto = pasos.get(i);
+                Paso paso = new Paso(pasoDto.getNroPaso(), pasoDto.getTexto(), receta);
+                paso = pasoRepository.save(paso);
 
-            if (imagenes != null && i < imagenes.length && !imagenes[i].isEmpty()) {
-                String url = imagenService.upload(imagenes[i], "pasos", receta.getNombreReceta());
-                Multimedia multimedia = new Multimedia(url, paso);
-                multimediaRepository.save(multimedia);
+                if (imagenes != null && i < imagenes.length && !imagenes[i].isEmpty()) {
+                    String url = imagenService.upload(imagenes[i], "pasos", receta.getNombreReceta());
+                    Multimedia multimedia = new Multimedia(url, paso);
+                    multimediaRepository.save(multimedia);
+                }
             }
         }
 
         return receta;
     }
+
 
 
 
@@ -205,7 +224,7 @@ public class RecetaService {
                 .orElseThrow(() -> new Exception("Receta no encontrada"));
 
         RecetaDTO dto = new RecetaDTO();
-        dto.setId(receta.getIdReceta());
+        dto.setIdReceta(receta.getIdReceta());
         dto.setNombre(receta.getNombreReceta());
         dto.setDescripcion(receta.getDescripcionReceta());
         //dto.setCategoria(receta.getTipoReceta().getDescripcion());

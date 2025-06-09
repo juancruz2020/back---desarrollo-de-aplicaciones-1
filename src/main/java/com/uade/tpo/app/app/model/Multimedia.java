@@ -10,19 +10,20 @@ public class Multimedia {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idContenido;
 
+    @Column(name = "tipo_contenido", nullable = false)
     private String tipoContenido;
     private String extension;
-    private String urlImagen;
+    private String urlContenido;
 
     @ManyToOne
     @JoinColumn(name = "idPaso")
     private Paso paso;
 
-    public Multimedia(Long idContenido, String tipoContenido, String extension, String urlImagen, Paso paso) {
+    public Multimedia(Long idContenido, String tipoContenido, String extension, String urlContenido, Paso paso) {
         this.idContenido = idContenido;
         this.tipoContenido = tipoContenido;
         this.extension = extension;
-        this.urlImagen = urlImagen;
+        this.urlContenido = urlContenido;
         this.paso = paso;
     }
 
@@ -57,12 +58,12 @@ public class Multimedia {
         this.extension = extension;
     }
 
-    public String geturlImagen() {
-        return urlImagen;
+    public String getUrlContenido() {
+        return urlContenido;
     }
 
-    public void seturlImagen(String urlImagen) {
-        this.urlImagen = urlImagen;
+    public void setUrlContenido(String urlContenido) {
+        this.urlContenido = urlContenido;
     }
 
     public Paso getPaso() {

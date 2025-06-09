@@ -49,4 +49,10 @@ public class IngredienteDTO {
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
     }
+
+    @Override
+    public String toString() {
+        return "IngredienteDTO{nombre='" + nombre + "', cantidad=" + cantidad +
+                ", unidad='" + unidad + "', observaciones='" + observaciones + "'}";
+    }
 }

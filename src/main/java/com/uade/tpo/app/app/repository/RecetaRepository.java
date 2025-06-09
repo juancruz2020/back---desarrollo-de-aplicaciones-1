@@ -11,6 +11,7 @@ import java.util.Optional;
 @Repository
 public interface RecetaRepository extends JpaRepository<Receta, Long> {
 
+    Optional<Receta> findByIdReceta(Long idReceta);
     List<Receta> findByNombreRecetaContainingIgnoreCase(String nombre);
     List<Receta> findByUsuario(Usuario usuario);
     Optional<Receta> findByNombreRecetaIgnoreCase(String nombre);

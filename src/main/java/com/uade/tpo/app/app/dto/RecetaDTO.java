@@ -12,9 +12,12 @@ public class RecetaDTO {
     private List<PasoDTO> pasos;
 
     public RecetaDTO(){}
-    // Getters y setters
 
-    public void setId (Long idReceta){
+    public Long getIdReceta() {
+        return idReceta;
+    }
+
+    public void setIdReceta(Long idReceta) {
         this.idReceta = idReceta;
     }
 

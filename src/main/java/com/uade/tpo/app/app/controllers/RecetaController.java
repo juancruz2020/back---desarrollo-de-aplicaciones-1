@@ -1,11 +1,13 @@
 package com.uade.tpo.app.app.controllers;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uade.tpo.app.app.service.*;
 import com.uade.tpo.app.app.model.*;
 import com.uade.tpo.app.app.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,12 +62,15 @@ public class RecetaController {
         return recetas.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(recetas);
     }
 
-    @PostMapping(value = "/cargar", consumes = "multipart/form-data")
+    @PostMapping(value = "/cargar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> cargarReceta(
-            @RequestPart("datos") RecetaDTO dto,
-            @RequestPart(value = "imagenes", required = false) MultipartFile[] imagenes) {
+            @RequestParam("datos") String recetaJson,
+            @RequestParam(value = "imagenes", required = false) MultipartFile[] imagenes) {
 
         try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            RecetaDTO dto = objectMapper.readValue(recetaJson, RecetaDTO.class);
+
             Receta receta = recetaService.cargarReceta(
                     dto.getNickname(),
                     dto.getNombre(),
@@ -81,13 +86,23 @@ public class RecetaController {
         }
     }
 
-    @PutMapping(value = "/modificar", consumes = "multipart/form-data")
+    @PutMapping(value = "/modificar/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> modificarReceta(
-            @RequestPart("datos") RecetaDTO dto,
-            @RequestPart(value = "imagenes", required = false) MultipartFile[] imagenes) {
+            @PathVariable Long id,
+            @RequestParam("datos") String recetaJson,
+            @RequestParam(value = "imagenes", required = false) MultipartFile[] imagenes) {
 
         try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            RecetaDTO dto = objectMapper.readValue(recetaJson, RecetaDTO.class);
+
+            System.out.println("JSON parseado:");
+            System.out.println("Nombre: " + dto.getNombre());
+            System.out.println("Pasos: " + dto.getPasos());
+            System.out.println("Ingredientes: " + dto.getIngredientes());
+
             Receta receta = recetaService.modificarReceta(
+                    id,
                     dto.getNickname(),
                     dto.getNombre(),
                     dto.getCategoria(),

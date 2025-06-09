@@ -1,12 +1,12 @@
 package com.uade.tpo.app.app.dto;
 
-
-import org.springframework.web.multipart.MultipartFile;
-
 public class PasoDTO {
     private Integer nroPaso;
     private String texto;
     private String urlImagen = "";
+
+    public PasoDTO() {
+    }
 
     public PasoDTO(Integer nroPaso, String texto, String urlImagen) {
         this.nroPaso = nroPaso;
@@ -14,11 +14,9 @@ public class PasoDTO {
         this.urlImagen = urlImagen;
     }
 
-    public PasoDTO() {
-
-    }
-
     public PasoDTO(Integer nroPaso, String texto) {
+        this.nroPaso = nroPaso;
+        this.texto = texto;
     }
 
     public Integer getNroPaso() {
@@ -37,11 +35,16 @@ public class PasoDTO {
         this.texto = texto;
     }
 
-    public String geturlImagen() {
+    public String getUrlImagen() {
         return urlImagen;
     }
 
-    public void seturlImagen(String foto) {
+    public void setUrlImagen(String urlImagen) {
         this.urlImagen = urlImagen;
+    }
+
+    @Override
+    public String toString() {
+        return "PasoDTO{nroPaso=" + nroPaso + ", texto='" + texto + "', urlImagen='" + urlImagen + "'}";
     }
 }
