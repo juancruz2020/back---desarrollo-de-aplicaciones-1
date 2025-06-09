@@ -76,17 +76,17 @@ public class RecetaService {
                                List<IngredienteDTO> ingredientes, List<PasoDTO> pasos,
                                String descripcion, MultipartFile[] imagenes) throws Exception {
 
-//        Usuario usuario = usuarioRepository.findByNicknameIgnoreCase(nickname)
-//                .orElseThrow(() -> new Exception("Usuario no encontrado"));
-//
-//        TipoReceta tipo = tipoRecetaRepository.findByDescripcionIgnoreCase(categoria)
-//                .orElseThrow(() -> new Exception("Categoría no encontrada"));
+        Usuario usuario = usuarioRepository.findByNicknameIgnoreCase("juancho")
+                .orElseThrow(() -> new Exception("Usuario no encontrado"));
+
+        TipoReceta tipo = tipoRecetaRepository.findByDescripcionIgnoreCase("Vegetariana")
+                .orElseThrow(() -> new Exception("Categoría no encontrada"));
 
         Receta receta = new Receta();
-        //receta.setUsuario(usuario);
+        receta.setUsuario(usuario);
         receta.setNombreReceta(nombre);
         receta.setDescripcionReceta(descripcion);
-        //receta.setTipoReceta(tipo);
+        receta.setTipoReceta(tipo);
         recetaRepository.save(receta);
 
         System.out.println("Ingredientes recibidos:");
