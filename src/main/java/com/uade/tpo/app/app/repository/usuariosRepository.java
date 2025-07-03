@@ -1,6 +1,7 @@
 package com.uade.tpo.app.app.repository;
 
 import com.uade.tpo.app.app.dto.CodigoDTO;
+import com.uade.tpo.app.app.model.Usuario;
 import com.uade.tpo.app.app.model.usuarios;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -46,5 +47,9 @@ public interface usuariosRepository extends JpaRepository<usuarios, Long> {
 
     @Query("SELECT u.mail FROM usuarios u WHERE u.nickname = :nickname OR u.mail = :mail")
     String findMailsByNicknameOrMail( String nickname, String mail);
+
+    // Devuelve solo el ID del usuario
+    @Query("SELECT u.idUsuario FROM Usuario u WHERE u.mail = :mail")
+    Optional<Long> findIdByMail(String mail);
 
 }
