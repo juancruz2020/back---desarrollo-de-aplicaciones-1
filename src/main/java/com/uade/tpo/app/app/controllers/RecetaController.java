@@ -22,7 +22,7 @@ public class RecetaController {
     private RecetaService recetaService;
 
     @GetMapping
-    public ResponseEntity<List<Receta>> listarTodas() {
+    public ResponseEntity<List<RecetaDTO>> listarTodas() {
         return ResponseEntity.ok(recetaService.listarRecetas());
     }
 
@@ -65,7 +65,8 @@ public class RecetaController {
     @PostMapping(value = "/cargar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> cargarReceta(
             @RequestParam("datos") String recetaJson,
-            @RequestParam(value = "imagenes", required = false) MultipartFile[] imagenes) {
+            @RequestParam(value = "imagenes", required = false) MultipartFile[] imagenes,
+            @RequestParam(value = "imagenReceta", required = false) MultipartFile imagenReceta) {
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -78,7 +79,9 @@ public class RecetaController {
                     dto.getIngredientes(),
                     dto.getPasos(),
                     dto.getDescripcion(),
-                    imagenes
+                    dto.getPorciones(),
+                    imagenes,
+                    imagenReceta
             );
             return ResponseEntity.ok(receta);
         } catch (Exception e) {

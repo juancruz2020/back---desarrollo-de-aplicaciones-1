@@ -8,9 +8,10 @@ public class RecetaDTO {
     private String nombre;
     private String categoria;
     private String descripcion;
+    private Integer porciones;
     private List<IngredienteDTO> ingredientes;
     private List<PasoDTO> pasos;
-
+    private String urlImagen;
     public RecetaDTO(){}
 
     public Long getIdReceta() {
@@ -67,6 +68,22 @@ public class RecetaDTO {
 
     public void setPasos(List<PasoDTO> pasos) {
         this.pasos = pasos;
+    }
+
+    public void setUrlImagen(String urlImagen) {
+    }
+    public String getUrlImagen() {
+        return urlImagen;
+    }
+    public int getPorciones() {
+        return porciones;
+    }
+    public void setPorciones(int porciones) {
+        this.porciones = porciones;
+    }
+
+    public String toString() {
+        return "RecetaDTO{idReceta=" + idReceta + ", nickname='" + nickname + "', nombre='" + nombre + "', categoria='" + categoria + "', descripcion='" + descripcion + "', porciones=" + porciones + ", ingredientes=" + ingredientes + ", pasos=" + pasos + ", urlImagen='" + urlImagen + "'}";
     }
 }
 

@@ -4,6 +4,7 @@ import com.uade.tpo.app.app.model.*;
 import com.uade.tpo.app.app.dto.*;
 import com.uade.tpo.app.app.repository.*;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class RecetaService {
@@ -40,12 +40,37 @@ public class RecetaService {
     @Autowired
     private UnidadRepository unidadRepository;
 
+    @Autowired
+    private FotoRepository fotoRepository;
+
     private ImagenService imagenService;
 
-    public List<Receta> listarRecetas() {
-        return recetaRepository.findAll();
-    }
+    public List<RecetaDTO> listarRecetas() {
+        List<Receta> recetas = recetaRepository.findAll();
+        List<RecetaDTO> dtos = new ArrayList<>();
 
+        for (Receta receta : recetas) {
+            Optional <String> urlImagen = fotoRepository.findUrlFotoByRecetaIdReceta((receta.getIdReceta()));
+            RecetaDTO dto = new RecetaDTO();
+            dto.setIdReceta(receta.getIdReceta());
+            dto.setNombre(receta.getNombreReceta());
+            dto.setDescripcion(receta.getDescripcionReceta());
+            dto.setUrlImagen(urlImagen.orElse(null));
+            if (receta.getTipoReceta() != null) {
+                dto.setCategoria(receta.getTipoReceta().getDescripcion());
+            } else {
+                // Puedes elegir alguna de las siguientes:
+                dto.setCategoria("Sin categoría");
+                // Opcional: loguear para corregir tus datos sucios en base
+                System.err.println("ADVERTENCIA: La receta con id " + receta.getIdReceta() + " no tiene categoría asignada.");
+            }
+
+            dto.setPorciones(receta.getPorciones() == null ? 0 : receta.getPorciones());
+            dtos.add(dto);
+        }
+
+        return dtos;
+    }
     public List<Receta> filtrarPorNombre(String nombre) {
         return recetaRepository.findByNombreRecetaContainingIgnoreCase(nombre);
     }
@@ -74,21 +99,33 @@ public class RecetaService {
 
     public Receta cargarReceta(String nickname, String nombre, String categoria,
                                List<IngredienteDTO> ingredientes, List<PasoDTO> pasos,
-                               String descripcion, MultipartFile[] imagenes) throws Exception {
+                               String descripcion, Integer porciones, MultipartFile[] imagenes, MultipartFile imagenReceta) throws Exception {
 
-        Usuario usuario = usuarioRepository.findByNicknameIgnoreCase("juancho")
+        Usuario usuario = usuarioRepository.findByNicknameIgnoreCase(nickname)
                 .orElseThrow(() -> new Exception("Usuario no encontrado"));
 
-        TipoReceta tipo = tipoRecetaRepository.findByDescripcionIgnoreCase("Vegetariana")
+        TipoReceta tipo = tipoRecetaRepository.findByDescripcionIgnoreCase(categoria)
                 .orElseThrow(() -> new Exception("Categoría no encontrada"));
 
+        // Guarda la receta
         Receta receta = new Receta();
         receta.setUsuario(usuario);
         receta.setNombreReceta(nombre);
         receta.setDescripcionReceta(descripcion);
         receta.setTipoReceta(tipo);
+        receta.setPorciones(porciones);
         recetaRepository.save(receta);
 
+        // Guarda imagen de la receta
+        String urlImagenReceta = imagenService.upload(imagenReceta, "recetas", receta.getNombreReceta());
+        if (urlImagenReceta != null) {
+            Foto foto = new Foto();
+            foto.setReceta(receta);
+            foto.setUrlFoto(urlImagenReceta);
+            fotoRepository.save(foto);
+        }
+
+        // Control para la carga de recetas - ELIMINAR UNA VEZ CORREGIDO
         System.out.println("Ingredientes recibidos:");
         for (IngredienteDTO i : ingredientes) {
             System.out.println(i.getNombre() + " - " + i.getCantidad() + " " + i.getUnidad());
@@ -227,7 +264,8 @@ public class RecetaService {
         dto.setIdReceta(receta.getIdReceta());
         dto.setNombre(receta.getNombreReceta());
         dto.setDescripcion(receta.getDescripcionReceta());
-        //dto.setCategoria(receta.getTipoReceta().getDescripcion());
+        dto.setPorciones(receta.getPorciones());
+        dto.setCategoria(receta.getTipoReceta().getDescripcion());
 
         List<PasoDTO> pasosDto = pasoRepository.findByRecetaIdReceta(receta.getIdReceta())
                 .stream()
@@ -247,6 +285,8 @@ public class RecetaService {
                 ))
                 .collect(Collectors.toList());
         dto.setIngredientes(ingredientesDto);
+
+        System.out.println("Receta con pasos obtenida: " + dto);
 
         return dto;
     }
