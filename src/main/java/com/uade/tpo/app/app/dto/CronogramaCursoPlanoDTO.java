@@ -2,7 +2,9 @@ package com.uade.tpo.app.app.dto;
 
 import java.math.BigDecimal;
 
-public class cursoConCronograma2DTO {
+public class CronogramaCursoPlanoDTO {
+    private String fechaInicio;
+
     private Integer idCurso;
     private String descripcion;
     private String contenidos;
@@ -10,12 +12,10 @@ public class cursoConCronograma2DTO {
     private Integer duracion;
     private BigDecimal precio;
     private String modalidad;
-    private CronogramaDTO2 cronograma;
 
-    public cursoConCronograma2DTO() {}
-
-    public cursoConCronograma2DTO(Integer idCurso, String descripcion, String contenidos, String requerimientos,
-                                  Integer duracion, BigDecimal precio, String modalidad, CronogramaDTO2 cronograma) {
+    public CronogramaCursoPlanoDTO(String fechaInicio, Integer idCurso, String descripcion, String contenidos,
+                                   String requerimientos, Integer duracion, BigDecimal precio, String modalidad) {
+        this.fechaInicio = fechaInicio;
         this.idCurso = idCurso;
         this.descripcion = descripcion;
         this.contenidos = contenidos;
@@ -23,39 +23,10 @@ public class cursoConCronograma2DTO {
         this.duracion = duracion;
         this.precio = precio;
         this.modalidad = modalidad;
-        this.cronograma = cronograma;
     }
 
-    public Integer getIdCurso() {
-        return idCurso;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public String getContenidos() {
-        return contenidos;
-    }
-
-    public String getRequerimientos() {
-        return requerimientos;
-    }
-
-    public Integer getDuracion() {
-        return duracion;
-    }
-
-    public BigDecimal getPrecio() {
-        return precio;
-    }
-
-    public String getModalidad() {
-        return modalidad;
-    }
-
-    public CronogramaDTO2 getCronograma() {
-        return cronograma;
+    public void setFechaInicio(String fechaInicio) {
+        this.fechaInicio = fechaInicio;
     }
 
     public void setIdCurso(Integer idCurso) {
@@ -86,7 +57,37 @@ public class cursoConCronograma2DTO {
         this.modalidad = modalidad;
     }
 
-    public void setCronograma(CronogramaDTO2 cronograma) {
-        this.cronograma = cronograma;
+    public String getFechaInicio() {
+        return fechaInicio;
     }
+
+    public Integer getIdCurso() {
+        return idCurso;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public String getContenidos() {
+        return contenidos;
+    }
+
+    public String getRequerimientos() {
+        return requerimientos;
+    }
+
+    public Integer getDuracion() {
+        return duracion;
+    }
+
+    public BigDecimal getPrecio() {
+        return precio;
+    }
+
+    public String getModalidad() {
+        return modalidad;
+    }
+
+    // getters y setters
 }

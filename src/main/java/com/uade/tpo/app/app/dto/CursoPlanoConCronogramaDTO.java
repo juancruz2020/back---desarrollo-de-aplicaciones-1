@@ -1,8 +1,9 @@
 package com.uade.tpo.app.app.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
-public class cursoConCronograma2DTO {
+public class CursoPlanoConCronogramaDTO {
     private Integer idCurso;
     private String descripcion;
     private String contenidos;
@@ -10,12 +11,26 @@ public class cursoConCronograma2DTO {
     private Integer duracion;
     private BigDecimal precio;
     private String modalidad;
-    private CronogramaDTO2 cronograma;
 
-    public cursoConCronograma2DTO() {}
+    private String nombreSede;
+    private LocalDate fechaInicio;
+    private LocalDate fechaFin;
+    private Integer vacantesDisponibles;
 
-    public cursoConCronograma2DTO(Integer idCurso, String descripcion, String contenidos, String requerimientos,
-                                  Integer duracion, BigDecimal precio, String modalidad, CronogramaDTO2 cronograma) {
+    // Constructor
+    public CursoPlanoConCronogramaDTO(
+            Integer idCurso,
+            String descripcion,
+            String contenidos,
+            String requerimientos,
+            Integer duracion,
+            BigDecimal precio,
+            String modalidad,
+            String nombreSede,
+            LocalDate fechaInicio,
+            LocalDate fechaFin,
+            Integer vacantesDisponibles
+    ) {
         this.idCurso = idCurso;
         this.descripcion = descripcion;
         this.contenidos = contenidos;
@@ -23,7 +38,10 @@ public class cursoConCronograma2DTO {
         this.duracion = duracion;
         this.precio = precio;
         this.modalidad = modalidad;
-        this.cronograma = cronograma;
+        this.nombreSede = nombreSede;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.vacantesDisponibles = vacantesDisponibles;
     }
 
     public Integer getIdCurso() {
@@ -54,8 +72,20 @@ public class cursoConCronograma2DTO {
         return modalidad;
     }
 
-    public CronogramaDTO2 getCronograma() {
-        return cronograma;
+    public String getNombreSede() {
+        return nombreSede;
+    }
+
+    public LocalDate getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public LocalDate getFechaFin() {
+        return fechaFin;
+    }
+
+    public Integer getVacantesDisponibles() {
+        return vacantesDisponibles;
     }
 
     public void setIdCurso(Integer idCurso) {
@@ -86,7 +116,19 @@ public class cursoConCronograma2DTO {
         this.modalidad = modalidad;
     }
 
-    public void setCronograma(CronogramaDTO2 cronograma) {
-        this.cronograma = cronograma;
+    public void setNombreSede(String nombreSede) {
+        this.nombreSede = nombreSede;
+    }
+
+    public void setFechaInicio(LocalDate fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public void setFechaFin(LocalDate fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public void setVacantesDisponibles(Integer vacantesDisponibles) {
+        this.vacantesDisponibles = vacantesDisponibles;
     }
 }
