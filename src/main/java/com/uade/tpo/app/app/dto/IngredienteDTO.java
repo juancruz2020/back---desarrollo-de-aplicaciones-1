@@ -3,11 +3,11 @@ package com.uade.tpo.app.app.dto;
 
 public class IngredienteDTO {
     private String nombre;
-    private Integer cantidad;
+    private double cantidad;
     private String unidad;
     private String observaciones;
 
-    public IngredienteDTO(String nombre, Integer cantidad, String unidad, String observaciones) {
+    public IngredienteDTO(String nombre, double cantidad, String unidad, String observaciones) {
         this.nombre = nombre;
         this.cantidad = cantidad;
         this.unidad = unidad;
@@ -26,11 +26,11 @@ public class IngredienteDTO {
         this.nombre = nombre;
     }
 
-    public Integer getCantidad() {
+    public double getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(Integer cantidad) {
+    public void setCantidad(double cantidad) {
         this.cantidad = cantidad;
     }
 

@@ -8,7 +8,7 @@ public class RecetaDTO {
     private String nombre;
     private String categoria;
     private String descripcion;
-    private Integer porciones;
+    private double porciones;
     private List<IngredienteDTO> ingredientes;
     private List<PasoDTO> pasos;
     private String urlImagen;
@@ -76,10 +76,10 @@ public class RecetaDTO {
     public String getUrlImagen() {
         return urlImagen;
     }
-    public int getPorciones() {
+    public double getPorciones() {
         return porciones;
     }
-    public void setPorciones(int porciones) {
+    public void setPorciones(double porciones) {
         this.porciones = porciones;
     }
 

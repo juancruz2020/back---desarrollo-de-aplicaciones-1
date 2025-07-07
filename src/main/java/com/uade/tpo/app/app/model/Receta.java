@@ -12,7 +12,7 @@ public class Receta {
     private String nombreReceta;
     private String descripcionReceta;
     private String fotoPrincipal;
-    private Integer porciones;
+    private double porciones;
     private Integer cantidadPersonas;
 
     @ManyToOne
@@ -23,7 +23,7 @@ public class Receta {
     @JoinColumn(name = "idTipo")
     private TipoReceta tipoReceta;
 
-    public Receta(Long idReceta, String nombreReceta, String descripcionReceta, String fotoPrincipal, Integer porciones, Integer cantidadPersonas, Usuario usuario, TipoReceta tipoReceta) {
+    public Receta(Long idReceta, String nombreReceta, String descripcionReceta, String fotoPrincipal, double porciones, Integer cantidadPersonas, Usuario usuario, TipoReceta tipoReceta) {
         this.idReceta = idReceta;
         this.nombreReceta = nombreReceta;
         this.descripcionReceta = descripcionReceta;
@@ -70,11 +70,11 @@ public class Receta {
         this.fotoPrincipal = fotoPrincipal;
     }
 
-    public Integer getPorciones() {
+    public double getPorciones() {
         return porciones;
     }
 
-    public void setPorciones(Integer porciones) {
+    public void setPorciones(double porciones) {
         this.porciones = porciones;
     }
 

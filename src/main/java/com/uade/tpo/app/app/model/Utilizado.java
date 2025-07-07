@@ -18,7 +18,7 @@ public class Utilizado {
     @JoinColumn(name = "idIngrediente")
     private Ingrediente ingrediente;
 
-    private Integer cantidad;
+    private double cantidad;
 
     @ManyToOne
     @JoinColumn(name = "idUnidad")
@@ -26,7 +26,7 @@ public class Utilizado {
 
     private String observaciones;
 
-    public Utilizado(Receta receta, Ingrediente ingrediente, Integer cantidad, Unidad unidad, String observaciones) {
+    public Utilizado(Receta receta, Ingrediente ingrediente, double cantidad, Unidad unidad, String observaciones) {
         this.receta = receta;
         this.ingrediente = ingrediente;
         this.cantidad = cantidad;
@@ -34,7 +34,7 @@ public class Utilizado {
         this.observaciones = observaciones;
     }
 
-    public Utilizado(Receta receta, Ingrediente ing, Integer cantidad, String unidad, String observaciones) {
+    public Utilizado(Receta receta, Ingrediente ing, double cantidad, String unidad, String observaciones) {
 
     }
 
@@ -66,11 +66,11 @@ public class Utilizado {
         this.ingrediente = ingrediente;
     }
 
-    public Integer getCantidad() {
+    public double getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(Integer cantidad) {
+    public void setCantidad(double cantidad) {
         this.cantidad = cantidad;
     }
 

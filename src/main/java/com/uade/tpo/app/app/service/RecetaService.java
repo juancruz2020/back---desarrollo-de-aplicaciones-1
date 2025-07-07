@@ -68,7 +68,7 @@ public class RecetaService {
                 System.err.println("ADVERTENCIA: La receta con id " + receta.getIdReceta() + " no tiene categoría asignada.");
             }
 
-            dto.setPorciones(receta.getPorciones() == null ? 0 : receta.getPorciones());
+            dto.setPorciones(receta.getPorciones() == 0.0 ? 0 : receta.getPorciones());
             dtos.add(dto);
         }
 
@@ -102,7 +102,7 @@ public class RecetaService {
 
     public Receta cargarReceta(String nickname, String nombre, String categoria,
                                List<IngredienteDTO> ingredientes, List<PasoDTO> pasos,
-                               String descripcion, Integer porciones, MultipartFile[] imagenes,
+                               String descripcion, double porciones, MultipartFile[] imagenes,
                                MultipartFile imagenReceta) throws Exception {
 
         Usuario usuario = usuarioRepository.findByNicknameIgnoreCase(nickname)
@@ -199,7 +199,7 @@ public class RecetaService {
         // Cargar nuevos ingredientes
         for (IngredienteDTO dto : ingredientes) {
             try {
-                if (dto.getNombre() == null || dto.getCantidad() == null || dto.getUnidad() == null) {
+                if (dto.getNombre() == null || dto.getCantidad() == 0.0 || dto.getUnidad() == null) {
                     System.out.println("Ingrediente inválido: " + dto);
                     continue;
                 }
