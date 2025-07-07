@@ -71,6 +71,7 @@ public class RecetaDTO {
     }
 
     public void setUrlImagen(String urlImagen) {
+        this.urlImagen = urlImagen;
     }
     public String getUrlImagen() {
         return urlImagen;

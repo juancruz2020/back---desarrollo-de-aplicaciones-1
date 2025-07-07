@@ -43,6 +43,7 @@ public class RecetaService {
     @Autowired
     private FotoRepository fotoRepository;
 
+    @Autowired
     private ImagenService imagenService;
 
     public List<RecetaDTO> listarRecetas() {
@@ -50,12 +51,14 @@ public class RecetaService {
         List<RecetaDTO> dtos = new ArrayList<>();
 
         for (Receta receta : recetas) {
-            Optional <String> urlImagen = fotoRepository.findUrlFotoByRecetaIdReceta((receta.getIdReceta()));
+
+            System.out.println("DEBUG: Receta ID: " + receta.getIdReceta() + ", Foto Principal: " + receta.getFotoPrincipal());
+
             RecetaDTO dto = new RecetaDTO();
             dto.setIdReceta(receta.getIdReceta());
             dto.setNombre(receta.getNombreReceta());
             dto.setDescripcion(receta.getDescripcionReceta());
-            dto.setUrlImagen(urlImagen.orElse(null));
+            dto.setUrlImagen(receta.getFotoPrincipal());
             if (receta.getTipoReceta() != null) {
                 dto.setCategoria(receta.getTipoReceta().getDescripcion());
             } else {
@@ -99,7 +102,8 @@ public class RecetaService {
 
     public Receta cargarReceta(String nickname, String nombre, String categoria,
                                List<IngredienteDTO> ingredientes, List<PasoDTO> pasos,
-                               String descripcion, Integer porciones, MultipartFile[] imagenes, MultipartFile imagenReceta) throws Exception {
+                               String descripcion, Integer porciones, MultipartFile[] imagenes,
+                               MultipartFile imagenReceta) throws Exception {
 
         Usuario usuario = usuarioRepository.findByNicknameIgnoreCase(nickname)
                 .orElseThrow(() -> new Exception("Usuario no encontrado"));
@@ -114,22 +118,25 @@ public class RecetaService {
         receta.setDescripcionReceta(descripcion);
         receta.setTipoReceta(tipo);
         receta.setPorciones(porciones);
-        recetaRepository.save(receta);
 
         // Guarda imagen de la receta
-        String urlImagenReceta = imagenService.upload(imagenReceta, "recetas", receta.getNombreReceta());
-        if (urlImagenReceta != null) {
-            Foto foto = new Foto();
-            foto.setReceta(receta);
-            foto.setUrlFoto(urlImagenReceta);
-            fotoRepository.save(foto);
+        if (imagenReceta != null && !imagenReceta.isEmpty()) {
+            String urlImagenReceta = imagenService.upload(imagenReceta, "recetas", receta.getNombreReceta());
+            System.out.println("URL de la imagen de la receta: " + urlImagenReceta);
+            receta.setFotoPrincipal(urlImagenReceta);
+            recetaRepository.save(receta);
+            if (urlImagenReceta != null) {
+                Foto foto = new Foto();
+                foto.setReceta(receta);
+                foto.setUrlFoto(urlImagenReceta);
+                fotoRepository.save(foto);
+            } else {
+                System.err.println("No se pudo cargar la imagen de la receta");
+            }
+        } else {
+            System.err.println("No se recibio la imagen de la receta");
         }
 
-        // Control para la carga de recetas - ELIMINAR UNA VEZ CORREGIDO
-        System.out.println("Ingredientes recibidos:");
-        for (IngredienteDTO i : ingredientes) {
-            System.out.println(i.getNombre() + " - " + i.getCantidad() + " " + i.getUnidad());
-        }
 
 
         // Guardar ingredientes y su uso
@@ -266,6 +273,8 @@ public class RecetaService {
         dto.setDescripcion(receta.getDescripcionReceta());
         dto.setPorciones(receta.getPorciones());
         dto.setCategoria(receta.getTipoReceta().getDescripcion());
+        dto.setUrlImagen(receta.getFotoPrincipal());
+        dto.setNickname(receta.getUsuario().getNickname());
 
         List<PasoDTO> pasosDto = pasoRepository.findByRecetaIdReceta(receta.getIdReceta())
                 .stream()

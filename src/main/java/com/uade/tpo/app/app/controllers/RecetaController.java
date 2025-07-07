@@ -1,6 +1,7 @@
 package com.uade.tpo.app.app.controllers;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uade.tpo.app.app.service.*;
 import com.uade.tpo.app.app.model.*;
@@ -72,6 +73,8 @@ public class RecetaController {
             ObjectMapper objectMapper = new ObjectMapper();
             RecetaDTO dto = objectMapper.readValue(recetaJson, RecetaDTO.class);
 
+            // --- Important: Pass the MultipartFile objects directly ---
+            // The service layer should handle the null/empty checks and actual file storage.
             Receta receta = recetaService.cargarReceta(
                     dto.getNickname(),
                     dto.getNombre(),
@@ -80,12 +83,18 @@ public class RecetaController {
                     dto.getPasos(),
                     dto.getDescripcion(),
                     dto.getPorciones(),
-                    imagenes,
-                    imagenReceta
+                    imagenes,        // Pass the array as is
+                    imagenReceta     // Pass the single file as is
             );
             return ResponseEntity.ok(receta);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (JsonProcessingException e) { // More specific exception for JSON parsing errors
+            // Log the error for debugging
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Error al parsear los datos JSON de la receta: " + e.getMessage());
+        } catch (Exception e) { // Catch all other exceptions, including those from the service layer
+            // Log the error for debugging
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al cargar la receta: " + e.getMessage());
         }
     }
 
