@@ -10,8 +10,8 @@ public class Multimedia {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idContenido;
 
-    @Column(name = "tipo_contenido", nullable = false)
-    private String tipoContenido;
+    @Column(name = "tipo_contenido")
+    private String tipoContenido = "jpg";
     private String extension;
     private String urlContenido;
 

@@ -66,8 +66,8 @@ public class RecetaController {
     @PostMapping(value = "/cargar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> cargarReceta(
             @RequestParam("datos") String recetaJson,
-            @RequestParam(value = "imagenes", required = false) MultipartFile[] imagenes,
-            @RequestParam(value = "imagenReceta", required = false) MultipartFile imagenReceta) {
+            @RequestParam(value = "imagenesPasos", required = false) List<MultipartFile> imagenesPasos,
+            @RequestParam(value = "imagenReceta", required = true) MultipartFile imagenReceta) {
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -83,7 +83,7 @@ public class RecetaController {
                     dto.getPasos(),
                     dto.getDescripcion(),
                     dto.getPorciones(),
-                    imagenes,        // Pass the array as is
+                    imagenesPasos,        // Pass the array as is
                     imagenReceta     // Pass the single file as is
             );
             return ResponseEntity.ok(receta);

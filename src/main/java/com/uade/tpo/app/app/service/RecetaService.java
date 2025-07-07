@@ -4,10 +4,10 @@ import com.uade.tpo.app.app.model.*;
 import com.uade.tpo.app.app.dto.*;
 import com.uade.tpo.app.app.repository.*;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
@@ -100,9 +100,11 @@ public class RecetaService {
         return usuario.map(u -> recetaRepository.findByUsuario(u)).orElse(Collections.emptyList());
     }
 
+    @Transactional
     public Receta cargarReceta(String nickname, String nombre, String categoria,
                                List<IngredienteDTO> ingredientes, List<PasoDTO> pasos,
-                               String descripcion, double porciones, MultipartFile[] imagenes,
+                               String descripcion, double porciones,
+                               List<MultipartFile> imagenesPasos,
                                MultipartFile imagenReceta) throws Exception {
 
         Usuario usuario = usuarioRepository.findByNicknameIgnoreCase(nickname)
@@ -110,6 +112,12 @@ public class RecetaService {
 
         TipoReceta tipo = tipoRecetaRepository.findByDescripcionIgnoreCase(categoria)
                 .orElseThrow(() -> new Exception("Categoría no encontrada"));
+
+        if (imagenesPasos != null) {
+            System.out.println(imagenesPasos.size() + " imagenes de pasos recibidas");
+        } else {
+            System.out.println("No se recibieron imagenes de pasos");
+        }
 
         // Guarda la receta
         Receta receta = new Receta();
@@ -151,16 +159,27 @@ public class RecetaService {
             utilizadoRepository.save(utilizado);
         }
 
+
         // Guardar pasos y asociar imágenes
         for (int i = 0; i < pasos.size(); i++) {
+            System.out.println(pasos.size());
             PasoDTO pasoDto = pasos.get(i);
             Paso paso = new Paso(pasoDto.getNroPaso(), pasoDto.getTexto(), receta);
             paso = pasoRepository.save(paso);
+            System.out.println("Paso numero " + i + " saved with ID: " + paso.getIdPaso());
+            System.out.println("Paso numero " + i + " saved with text: " + paso.getTexto());
 
-            if (imagenes != null && i < imagenes.length && !imagenes[i].isEmpty()) {
-                String url = imagenService.upload(imagenes[i], "pasos", receta.getNombreReceta());
+            if (imagenesPasos != null &&
+                    imagenesPasos.size() > i &&
+                    imagenesPasos.get(i) != null &&
+                    !imagenesPasos.get(i).isEmpty()) {
+
+                String url = imagenService.upload(imagenesPasos.get(i), "pasos", receta.getNombreReceta());
                 Multimedia multimedia = new Multimedia(url, paso);
+                System.out.println("Paso ID antes de guardar multimedia: " + paso.getIdPaso());
                 multimediaRepository.save(multimedia);
+            } else {
+                System.out.println("Paso " + i + " no tiene imagen. No se guarda multimedia.");
             }
         }
 
@@ -227,6 +246,7 @@ public class RecetaService {
                 paso = pasoRepository.save(paso);
 
                 if (imagenes != null && i < imagenes.length && !imagenes[i].isEmpty()) {
+                    System.out.println("URL de la imagen de paso " + i + ": " + imagenes[i].getOriginalFilename());
                     String url = imagenService.upload(imagenes[i], "pasos", receta.getNombreReceta());
                     Multimedia multimedia = new Multimedia(url, paso);
                     multimediaRepository.save(multimedia);

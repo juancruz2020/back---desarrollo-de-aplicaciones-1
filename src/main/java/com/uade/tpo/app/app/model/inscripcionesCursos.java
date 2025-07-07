@@ -7,7 +7,6 @@ import lombok.*;
 @Table(name = "inscripcionesCursos")
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 public class inscripcionesCursos {
 
