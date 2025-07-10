@@ -26,5 +26,4 @@ public class CursoConCronogramaDTO {
         this.cronograma = cronograma;
     }
 
-    // getters y setters
 }

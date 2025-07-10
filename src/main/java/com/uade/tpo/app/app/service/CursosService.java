@@ -54,14 +54,14 @@ public class CursosService {
 
             if (esAlumno) {
                 // Usuario registrado como alumno → ver cursos completos
-                return cursosrepo.findAll(); // o un DTO completo si preferís
+                return cursosrepo.findAll();
             } else {
                 // Usuario NO es alumno → ver solo resumen
                 return cursosrepo.findAll();
             }
         } else {
             // Usuario no existe → ver solo resumen
-            return cursosrepo.findAll(); //cambie el cursoresumen
+            return cursosrepo.findAll();
         }
     }
 
@@ -100,30 +100,30 @@ public class CursosService {
         String mail = dto.getMail();
         Long idCronograma = dto.getIdCronograma();
 
-        // 1. Buscar alumno por mail
+        // Buscar alumno por mail
         Optional<alumnos> alumnoOpt = alumnosRepository.findAlumnoByMail(mail);
         if (alumnoOpt.isEmpty()) {
             throw new Exception("Alumno no encontrado con mail: " + mail);
         }
         alumnos alumno = alumnoOpt.get();
 
-        // 2. Buscar cronograma por id
+        // Buscar cronograma por id
         Optional<cronogramaCursos> cronogramaOpt = cronogramaRepo.findById(idCronograma);
         if (cronogramaOpt.isEmpty()) {
             throw new Exception("Cronograma no encontrado con id: " + idCronograma);
         }
         cronogramaCursos cronograma = cronogramaOpt.get();
 
-        // 3. Crear nueva asistencia con fecha actual
+        // Crear nueva asistencia con fecha actual
         asistenciaCursos asistencia = new asistenciaCursos();
         asistencia.setAlumno(alumno);
         asistencia.setCronograma(cronograma);
         asistencia.setFecha(LocalDateTime.now());
 
-        // 4. Guardar en BD
+        // Guardar en BD
         asistenciaCursos saved = AsistenciaCursosRepository.save(asistencia);
 
-        // 5. Mapear a DTO y devolver
+        // Mapear a DTO y devolver
         return mapToDTO(saved);
     }
 
@@ -131,7 +131,7 @@ public class CursosService {
         return new AsistenciaCursosDTO(
                 asistencia.getIdAsistencia(),
                 asistencia.getAlumno().getIdAlumno(),
-                asistencia.getAlumno().getUsuario().getNombre(),  // suponiendo existe getNombre() en usuarios
+                asistencia.getAlumno().getUsuario().getNombre(),
                 asistencia.getAlumno().getUsuario().getMail(),
                 asistencia.getCronograma().getIdCronograma(),
                 asistencia.getCronograma().getFechaInicio(),
@@ -207,14 +207,14 @@ public class CursosService {
 
 
     public cursoConCronograma2DTO obtenerCursoInscripto(InscripcionConsultaDTO dto) throws Exception {
-        // 1. Buscar alumno por mail
+        // Buscar alumno por mail
         Optional<alumnos> alumnoOpt = alumnosRepository.findAlumnoByMail(dto.getMail());
         if (alumnoOpt.isEmpty()) {
             throw new Exception("Alumno no encontrado con mail: " + dto.getMail());
         }
         alumnos alumno = alumnoOpt.get();
 
-        // 2. Buscar inscripción para ese alumno y cronograma
+        // Buscar inscripción para ese alumno y cronograma
         Optional<inscripcionesCursos> inscripcionOpt = inscripcionesCursosRepository
                 .findByAlumnoAndCronograma_IdCronograma(alumno, dto.getIdCronograma());
 
@@ -223,11 +223,11 @@ public class CursosService {
         }
         inscripcionesCursos inscripcion = inscripcionOpt.get();
 
-        // 3. Obtener cronograma y curso
+        // Obtener cronograma y curso
         cronogramaCursos cronograma = inscripcion.getCronograma();
         cursos curso = cronograma.getCurso();
 
-        // 4. Mapear cronograma a DTO
+        // Mapear cronograma a DTO
         CronogramaDTO2 CronogramaDTO2 = new CronogramaDTO2(
                 cronograma.getSede().getNombreSede(),
                 cronograma.getFechaInicio(),
@@ -235,7 +235,7 @@ public class CursosService {
                 cronograma.getVacantesDisponibles()
         );
 
-        // 5. Devolver DTO con curso + cronograma específico
+        // Devolver DTO con curso + cronograma específico
         return new cursoConCronograma2DTO(
                 curso.getIdCurso(),
                 curso.getDescripcion(),
@@ -249,20 +249,20 @@ public class CursosService {
     }
 
     public void bajaInscripcion(InscripcionConsultaDTO dto) throws Exception {
-        // 1. Buscar alumno por mail
+        // Buscar alumno por mail
         Optional<alumnos> alumnoOpt = alumnosRepository.findAlumnoByMail(dto.getMail());
         if (alumnoOpt.isEmpty()) {
             throw new Exception("Alumno no encontrado con mail: " + dto.getMail());
         }
         alumnos alumno = alumnoOpt.get();
 
-        // 2. Buscar inscripción por alumno y cronograma
+        // Buscar inscripción por alumno y cronograma
         Optional<inscripcionesCursos> inscripcionOpt = inscripcionesCursosRepository.findByAlumnoAndCronograma_IdCronograma(alumno, dto.getIdCronograma());
         if (inscripcionOpt.isEmpty()) {
             throw new Exception("No existe inscripción para ese alumno y cronograma.");
         }
 
-        // 3. Borrar la inscripción
+        // Borrar la inscripción
         inscripcionesCursosRepository.delete(inscripcionOpt.get());
     }
 

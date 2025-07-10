@@ -73,8 +73,6 @@ public class RecetaController {
             ObjectMapper objectMapper = new ObjectMapper();
             RecetaDTO dto = objectMapper.readValue(recetaJson, RecetaDTO.class);
 
-            // --- Important: Pass the MultipartFile objects directly ---
-            // The service layer should handle the null/empty checks and actual file storage.
             Receta receta = recetaService.cargarReceta(
                     dto.getNickname(),
                     dto.getNombre(),
@@ -83,16 +81,14 @@ public class RecetaController {
                     dto.getPasos(),
                     dto.getDescripcion(),
                     dto.getPorciones(),
-                    imagenesPasos,        // Pass the array as is
-                    imagenReceta     // Pass the single file as is
+                    imagenesPasos,
+                    imagenReceta
             );
             return ResponseEntity.ok(receta);
-        } catch (JsonProcessingException e) { // More specific exception for JSON parsing errors
-            // Log the error for debugging
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().body("Error al parsear los datos JSON de la receta: " + e.getMessage());
-        } catch (Exception e) { // Catch all other exceptions, including those from the service layer
-            // Log the error for debugging
+        } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al cargar la receta: " + e.getMessage());
         }

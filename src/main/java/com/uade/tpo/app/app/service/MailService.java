@@ -25,7 +25,7 @@ public class MailService {
 
             helper.setTo(destinatario);
             helper.setSubject(asunto);
-            helper.setText(cuerpo, false); // false = texto plano, true = HTML
+            helper.setText(cuerpo, false);
             helper.setFrom(env.getProperty("spring.mail.username")); // Se toma desde el application.properties
 
             mailSender.send(mensaje);

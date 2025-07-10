@@ -6,7 +6,6 @@ public class RegistroUsuarioDTO {
 
     private String usuario;
 
-    // Getters y setters
     public String getMail() { return mail; }
     public void setMail(String mail) { this.mail = mail; }
 

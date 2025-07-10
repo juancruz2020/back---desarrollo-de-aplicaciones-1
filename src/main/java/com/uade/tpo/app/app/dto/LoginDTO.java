@@ -8,8 +8,6 @@ public class LoginDTO {
 
     private String contrasena;
 
-    // Getters y setters
-
 
     public String getCredencialNikc() {
         return credencialNikc;

@@ -8,7 +8,6 @@ public class CambioContrasenaDTO {
 
     private String contrasena;
 
-    // Getters y setters
     public String getCodigo() { return codigo; }
     public void setCodigo(String codigo) { this.codigo = codigo; }
 
@@ -18,6 +17,7 @@ public class CambioContrasenaDTO {
     public String getMail() {
         return mail;
     }
+
     public void setMail(String mail) {
         this.mail = mail;
     }

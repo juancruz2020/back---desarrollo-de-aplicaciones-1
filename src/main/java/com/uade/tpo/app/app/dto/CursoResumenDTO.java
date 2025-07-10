@@ -6,7 +6,7 @@ public class CursoResumenDTO {
 
     public CursoResumenDTO(String contenidos, String descripcion) {
         this.contenidos = contenidos;
-        this.descripcion = descripcion; // corregido
+        this.descripcion = descripcion;
     }
 
     public CursoResumenDTO() {

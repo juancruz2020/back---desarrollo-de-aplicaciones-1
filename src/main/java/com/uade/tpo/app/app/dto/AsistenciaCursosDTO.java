@@ -17,7 +17,6 @@ public class AsistenciaCursosDTO {
     private String descripcionCurso;
     private LocalDateTime fechaAsistencia;
 
-    // Constructor, getters y setters
     public AsistenciaCursosDTO() {}
 
     public AsistenciaCursosDTO(Integer idAsistencia, Integer idAlumno, String nombreAlumno, String mailAlumno,

@@ -89,5 +89,4 @@ public class CronogramaCursoPlanoDTO {
         return modalidad;
     }
 
-    // getters y setters
 }

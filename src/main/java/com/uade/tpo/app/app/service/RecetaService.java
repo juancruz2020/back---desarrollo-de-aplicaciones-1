@@ -199,11 +199,11 @@ public class RecetaService {
         Receta receta = recetaRepository.findByIdReceta(id)
                 .orElseThrow(() -> new Exception("Receta no encontrada"));
 
-        //TipoReceta tipo = tipoRecetaRepository.findByDescripcionIgnoreCase(categoria)
-        //        .orElseThrow(() -> new Exception("Categoría no encontrada"));
+        TipoReceta tipo = tipoRecetaRepository.findByDescripcionIgnoreCase(categoria)
+                .orElseThrow(() -> new Exception("Categoría no encontrada"));
 
         receta.setDescripcionReceta(descripcion);
-        //receta.setTipoReceta(tipo);
+        receta.setTipoReceta(tipo);
         recetaRepository.save(receta);
 
         // Eliminar ingredientes y pasos anteriores
@@ -238,7 +238,6 @@ public class RecetaService {
             }
         }
 
-        // No agregar nuevos pasos si no vienen en la petición
         if (pasos != null && !pasos.isEmpty()) {
             for (int i = 0; i < pasos.size(); i++) {
                 PasoDTO pasoDto = pasos.get(i);

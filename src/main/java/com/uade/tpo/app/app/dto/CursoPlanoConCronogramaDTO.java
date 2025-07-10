@@ -17,7 +17,6 @@ public class CursoPlanoConCronogramaDTO {
     private LocalDate fechaFin;
     private Integer vacantesDisponibles;
 
-    // Constructor
     public CursoPlanoConCronogramaDTO(
             Integer idCurso,
             String descripcion,

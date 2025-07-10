@@ -12,8 +12,6 @@ public class RegistroAlumnoDTO {
 
     private BigDecimal cuentaCorriente;
 
-
-    // Getters y setters
     public String getNumeroTramite() { return numeroTramite; }
     public void setNumeroTramite(String numeroTramite) { this.numeroTramite = numeroTramite; }
 
